@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    entrypoint: "/docker-entrypoint.sh"
+    env_file:
+      - .env
+
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/app/server
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0.32
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - db_config:/var/run/mysqld
+volumes:
+  db:
+  db_config:

@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+        <form method="POST" action="">
+        {% csrf_token %}
+
+            <div class="section-title">
+
+                <br>
+                <h3>Na pewno chcesz usunąć ten element?</h3>
+                <p> "{{obj}}"</p>
+                <br>
+                <a href="{{request.META.HTTP_REFERER}}">Powrót</a>
+                <input type="submit" value="Potwierdź">
+
+            </div>
+
+        </form>
+      </div>
+    </section>
+
+
+{% endblock content %}

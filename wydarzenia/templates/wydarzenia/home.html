@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Najbliższe Wydarzenia</h2>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 d-flex justify-content-center">
+            <ul id="portfolio-flters">
+              <li {% if not active_topic %} class="filter-active" {% endif %}>
+                  <a href="{% url 'home' %}">Wszystkie</a>
+              </li>
+              {% for topic in topics %}
+                <li {% if topic.name == active_topic %} class="filter-active" {% endif %}>
+                    <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+                </li>
+              {% endfor %}
+                <li class="filter-active" >
+                  <form method="GET" action="{% url 'home' %}">
+                    <input type="text" name="q" placeholder="Wyszukaj wydarzenie...">
+                  </form>
+                </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row portfolio-container">
+            {% for room in room_list %}
+          <div class="col-lg-4 col-md-6 portfolio-item">
+            <div class="portfolio-wrap">
+
+                {% if room.image %}
+                    <img src="{{ room.image.url }}" class="img-fluid" alt="">
+                {% else %}
+                    <img src="{% static 'assets/img/portfolio/1.jpg' %}" class="img-fluid" alt="">
+                {% endif %}
+
+              <div class="portfolio-info">
+                <h4>{{ room.name }}</h4>
+                <p>{{ room.date|date:"d.m.y" }}</p>
+                <p>{{ room.location }}</p>
+                <div class="portfolio-links">
+<!--                  <a href="#" title="Weź Udział"><i class="bx bx-plus"></i></a>-->
+                  <a href="{% url 'room' room.id %}" title="Zobacz opis"><i class="bx bx-link"></i></a>
+                  {% if request.user == room.host %}
+                    <a href="{% url 'update-room' room.id %}" title="Edytuj"><i class="bx bx-edit"></i></a>
+                    <a href="{% url 'delete-room' room.id %}" title="Usuń"><i class="bx bx-trash"></i></a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+          {% include 'wydarzenia/feed_component.html' %}
+      </div>
+    </section>
+
+{% endblock content %}

@@ -1,0 +1,90 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>{{ room.name }}</h2>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section id="portfolio-details" class="portfolio-details">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-8">
+            <div class="portfolio-details-slider swiper">
+              <div class="swiper-wrapper align-items-center">
+                <div class="">
+
+
+                    {% if room.image %}
+                        <img src="{{ room.image.url }}" alt="">
+                    {% else %}
+                        <img src="{% static 'assets/img/portfolio/1.jpg' %}" alt="">
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="portfolio-info">
+              <h3>Szczegóły wydarzenia</h3>
+              <ul>
+                <li><strong>Miejsce</strong>: {{ room.location }}</li>
+                <li><strong>Data</strong>: {{ room.date|date:"d.m.Y" }}r.</li>
+                <li><strong>Start</strong>: {{ room.time|time:"H:i" }}</li>
+                <li><strong>Cena</strong>: {% if room.price > 0 %}{{ room.price }}zł{% else %}Free{% endif %}</li>
+                <li><strong>Dodał</strong>: <a href="{% url 'profile' room.host.id %}">{{ room.host }}</a></li>
+              </ul>
+            </div>
+            <div class="portfolio-description">
+              <h2>Opis</h2>
+              <p>
+                {{ room.description|safe }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+        <div class="section-title">
+          <h3>Komentarze</h3>
+        </div>
+
+
+        {% if request.user.is_authenticated %}
+        <div class="col-md-4 form-group comment">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input class="form-control" type="text" name="body" placeholder="Wpisz komentarz"/>
+<!--                <div class="text-center"><button type="submit">Dodaj komentarz</button></div>-->
+                <p></p>
+            </form>
+        </div>
+        {% endif %}
+
+
+        {% for message in room_messages %}
+        <div>
+            <small><a href="{% url 'profile' message.user.id %}">{{message.user}}</a>   {{message.created|timesince}} temu</small>
+            {% if request.user == message.user %}
+            <a href="{% url 'delete-message' message.id %}" title="Usuń"><i class="bx bx-trash"></i></a>
+            {% endif %}
+            <p> {{message.body}}</p>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+{% endblock %}

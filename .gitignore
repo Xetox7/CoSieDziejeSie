@@ -1,0 +1,9 @@
+*.pyc
+__pycache__
+.idea/
+db.sqlite3
+*.env
+static/admin/*
+static/django_tinymce/*
+static/tinymce/*
+media/*

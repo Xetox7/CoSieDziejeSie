@@ -1,0 +1,8 @@
+black==23.1.0
+Pillow==9.0.1
+Django==4.1.7
+flake8==6.0.0
+django-tinymce==3.6.0
+isort==5.12.0
+mysqlclient==2.1.1
+python-decouple==3.8
